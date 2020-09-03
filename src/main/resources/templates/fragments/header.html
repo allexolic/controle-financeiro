@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  
+<nav class="blue-grey darken-4" role="navigation" th:fragment="header">
+    <div class="nav-wrapper container"><a id="logo-container" href="#"th:href="@{/controleFinanceiro}" class="brand-logo">Financeiro</a>
+      <ul class="right hide-on-med-and-down">
+      	<li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/contas}">Contas</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/usuarios}">Usuários</a></li>        
+        <li sec:authorize="hasRole('ROLE_PARAM')">
+        	<a class="dropdown-button" href="#!" data-activates="dropdownCadastros" data-beloworigin="true">
+        		Cadastro <i class="material-icons right">arrow_drop_down</i>
+        	</a>
+        	<ul id="dropdownCadastros" class="dropdown-content">
+        		<li><a th:href="@{/fabricantes}">Fabricante</a></li>
+        		<li><a th:href="@{/produtos}">Produto</a></li>
+        		
+        	</ul>
+        </li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')">
+        	<a class="dropdown-button" href="#!" data-activates="dropdownRelatorios" data-beloworigin="true">
+        		Relatórios <i class="material-icons right">arrow_drop_down</i>
+        	</a>
+        	<ul id="dropdownRelatorios" class="dropdown-content">
+        		<li><a th:href="@{/relatorios/totalContas}" style="font-size: 15px;">Total Contas</a></li>
+        		<li><a href="#" style="font-size: 15px;">Total Compras</a></li>
+        	</ul>
+        </li>
+        <li>
+        	<a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn-small">
+        		<i class="material-icons">lock_open</i>Login
+        	</a>
+        </li>
+        <li>
+            <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn-small">
+        		<i class="material-icons">lock_outline</i>Logout
+        	</a>
+        </li>
+      </ul>
+      <!--
+      <div align="right" style="position: absolute;right: -120px;">
+      <form th:action="@{/login}" method="post">
+ 	  <button sec:authorize="isAnonymous()" class="btn waves-effect waves-orange grey lighten-4" type="submit">
+ 	  	<font color="black">Login</font> 
+ 	  </button>
+ 	  </form>
+ 	
+      <form th:action="@{/logout}" method="post">
+ 	  <button sec:authorize="isAuthenticated()" class="waves-effect waves-light btn red darken-3" type="submit">Logout</button>
+ 	  </form>   
+ 	  </div>
+ 	   -->	 	  
+      <ul id="nav-mobile" class="side-nav">
+      	<li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/contas}">Contas</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/usuarios}">Usuários</a></li>
+        <li sec:authorize="hasRole('ROLE_PARAM')">
+        	<a class="dropdown-button" href="#!" data-activates="dropdownCadastrosMobile"
+        	   data-beloworigin="true">Cadastro
+        	<i class="material-icons right">arrow_drop_down</i>
+        	</a>
+        	<ul id="dropdownCadastrosMobile" class="dropdown-content">
+        		<li><a th:href="@{/fabricantes}">Fabricante</a></li>
+        		<li><a th:href="@{/produtos}">Produto</a></li>
+        	</ul>
+        </li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')">
+        	<a class="dropdown-button" href="#!" data-activates="dropdownRelatoriosMobile"
+        	   data-beloworigin="true">Relatórios
+        	   <i class="material-icons right">arrow_drop_down</i>
+        	</a>
+        	<ul id="dropdownRelatoriosMobile" class="dropdown-content">
+        		<li><a th:href="@{/relatorios/totalContas}" style="font-size: 15px;">Total Contas</a></li>
+        		<li><a href="#" style="font-size: 15px;">Total Compras</a></li>
+        	</ul>
+        </li>
+        <li>
+        	<a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn-small">
+        		<i class="material-icons">lock_open</i>Login
+        	</a>
+        </li>        
+        <li><a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn-small">
+        	<i class="material-icons">lock_outline</i>Logout
+        	</a>
+        </li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
+    </div>
+   
+ </nav> 
+ 
+ </html> 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+		  name="viewport"/>
+  <title>Controle Financeiro Versão 1.0</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link th:href="@{/vendor/css/materialize.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link th:href="@{/vendor/css/style.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link th:href="@{/vendor/css/iziToast.css}" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+  
+	<header th:replace="/fragments/header :: header"></header> 
+
+	<section id="bodyconteudo" layout:fragment="conteudo"></section>
+	
+	<div th:replace="/fragments/footer :: footer"></div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script th:src="@{/vendor/js/jquery-3.5.1.min.js}"></script>
+  
+  <script th:src="@{/vendor/js/materialize.js}"></script>
+  <script th:src="@{/vendor/js/materialize.min.js}"></script>
+  <script th:src="@{/vendor/js/jquery.maskMoney.js}"></script>
+  <script th:src="@{/vendor/js/init.js}"></script>
+  <script th:src="@{/vendor/js/iziToast.js}"></script>
+  <script th:src="@{/vendor/css/style.css}"></script>
+  <script th:src="@{/vendor/js/jquery.mask.min.js}"></script>
+  
+  <th:block layout:fragment="javascript-controle" />
+</body>
+</html>

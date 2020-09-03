@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="/layout/layoutPadrao">
+
+<head>
+	<title th:text="${codigo == null ? 'Cadastrar Produto' : 'Editar Produto'}"></title>
+</head>
+<section layout:fragment="conteudo">
+	<div class="container">
+		<div class="section">
+			<div class="input-field col m12 s12 l4" align="right" style="margin-left: 500px;">
+				<a class="waves-effect waves-light btn" th:href="@{/produtos/add}">Novo</a>
+			</div>
+			<!-- Mensagens -->
+			<div th:if="${messageAdd}">
+				<h6 id="messageAdd" class="messageAdd" style="color: white;" th:text="${messageAdd}"></h6>
+			</div>
+			<div th:if="${messageEdit}">
+				<h6 id="messageEdit" class="messageEdit" style="color: white;" th:text="${messageEdit}"></h6>
+			</div>			
+			<!-- Mensagens -->
+
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="card hoverable">
+					
+						<div class="card-content black-text">
+							<span class="card-title"
+								  th:text="${codigo == null ? 'Cadastrar Produto' : 'Editar Produto'}"></span>
+								  
+						<div class="row">
+							<form class="col s12" th:action="@{/produtos/add}" th:object="${produto}" method="post">
+								<input type="hidden" th:field="*{codigo}" />
+								
+								<div class="row">
+									<div class="input-field col m6 s12">
+										<input id="nomeProduto" type="text" class="validate" th:field="*{nomeProduto}"
+											   required />
+										<label for="nomeProduto">Nome</label>	   
+									</div>
+									
+									<div class="input-field col m2 s12">
+										<input id="nuPeso" type="text" class="validate" th:field="*{nuPeso}" />
+										<label for="nuPeso">Peso</label>
+									</div>
+									
+									<div class="input-field col m2 s12">
+										<select id="medida" class="validate" th:field="*{medida}">
+											<option value="">Medida</option>
+											<option value="kg">Kg</option>
+											<option value="g">g</option>
+											<option value="ml">ml</option>
+										</select>
+										<label for="medida">Medida</label>
+									</div>
+									
+								</div>
+								<div class="row">	
+									<div class="input-field col m6 s12">
+										
+										<i class="material-icons prefix">textsms</i>
+										<input type="text" id="autocomplete-input-fabricante"
+											   placeholder="Pesquise pelo nome do fabricante" autocomplete="off"
+											   class="autocomplete" th:field="*{fabricante.nome}" required>
+										<label for="autocomplete-input-fabricante">Fabricante</label>
+										
+										<input type="hidden" name="fabricante" id="fabricante" value="" 
+										th:field="*{fabricante.codigo}"/>	   
+										<!--
+										
+										<select id="fabricante" class="validate" th:field="*{fabricante}">
+											<option value="">Selecione o fabricante</option>
+											<option th:each="fabricante : ${listaFabricantes}"
+													th:text="${fabricante.nome}"
+													th:value="${fabricante.codigo}">
+													
+											</option>
+										</select>
+										<label for="fabricante">Fabricante</label>
+										-->
+									</div>
+									<div class="input-field col m5 s12">
+										<select id="embalagem" class="validate" th:field="*{embalagem}">
+											<option value="">Selecione o tipo de embalagem</option>
+											<option value="metal">Metal</option>
+											<option value="plastico">Plástico</option>
+											<option value="vidro">Vidro</option>
+										</select>
+										<label for="embalagem">Embalagem</label>
+									</div>
+								</div>
+								
+								<button id="btnClick" class="btn waves-effect waves-light" type="submit" 
+								        name="action">Salvar
+									<i class="material-icons right">send</i>
+								</button>
+								
+							</form>							
+						</div>
+								  
+						</div>
+						
+						<div class="card-action">
+							<a th:href="@{/produtos}">Voltar</a>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/produto.autocomplete-fabricante.js}"></script>
+	<script th:src="@{/javascript/toast-message.js}"></script>
+</th:block>	  
+</html>

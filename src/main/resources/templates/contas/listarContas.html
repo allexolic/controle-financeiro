@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Conta</title>
+</head>  
+<body>
+<div layout:fragment="conteudo">
+<div class=container>	
+<div class="section">
+		<h5>Contas</h5>
+	    <div class="input-field col m12 s12 l4" align="right">
+		<a class="waves-effect waves-light btn" th:href="@{/contas/add}">Cadastrar</a>
+		</div>
+	<div class="card">
+		<div class="card-panel">		
+			<div class="row">
+				<form class="col s12" method="get" th:action="@{/contas}" th:object="${conta}">
+					<div class="row">
+						<div class="input-field col m12 s12 l4">
+							<i class="material-icons prefix">account_circle</i>
+							<select id="icon_prefix" th:field="*{statusConta}">
+								<option value="" selected>Selecione</option>
+								<option value="PENDENTE">Pendente</option>
+								<option value="PAGO">Pago</option>
+							</select>
+							<label for="icon_prefix">Pesquisa por status</label>
+						</div>
+
+						<div class="input-field col m12 s12 l2">
+							<input type="text" th:field="*{dtVencimento}" class="datepicker" 
+							       placeholder="Data de" value=""/>
+							<label for="dataDe">Data de</label>
+						</div>
+						<div class="input-field col m12 s12 l2">
+							<input type="text" th:field="*{dtVencimentoAte}" class="datepicker"
+							       placeholder="Data até" value=""/>
+							<label for="dataDe">Data até</label>
+						</div>
+						
+				        <div class="input-field col m12 s12 l4">
+							<button type="submit" class="waves-effect waves-light btn">Pesquisar</button>
+						    
+						</div>
+					</div>
+					
+				</form>				
+			</div>
+			
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="card hoverable">
+						<div class="card-content black-text">
+							<span class="card-title">Contas</span>
+							
+							<table class="responsive-table highlight">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Nome doc.</th>		
+										<th>Data vencimento</th>							
+										<th>Data pagamento</th>
+										<th>Valor pago(R$)</th>
+										<th>Status</th>
+										<th>Ações</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="conta : ${pagina.conteudo}">
+										<td th:text="${conta.id}"></td>
+										<td th:switch="${{conta.nmDoc}}">
+											<span th:case="'1'" th:text="Condomínio"></span>
+											<span th:case="'2'" th:text="'Conta de luz'"></span>
+											<span th:case="'3'" th:text="'Conta de gás'"></span>
+											<span th:case="'4'" th:text="Financiamento"></span>
+											<span th:case="'5'" th:text="Fluminense"></span>
+											<span th:case="'6'" th:text="'NET TV'"></span>
+										</td>
+										<td th:text="${{conta.dtVencimento}}"></td>
+										<td th:text="${{conta.dtPagamento}}"></td>
+										<td th:text="${{conta.valorPago}}"></td>									
+										<td th:style="${{conta.statusConta}} == 'PAGO' ? 'background: mediumSeaGreen; color: white' : 'background: orangeRed; color: white'"
+										    th:text="${conta.statusConta}"></td>
+	
+										<td>
+											<a class="tooltipped" data-position="top" data-delay="50"
+											   data-tooltip="Pagar" th:href="@{/contas/{id}(id=${conta.id})}">
+											  
+											   <i class="tiny material-icons">payment</i>
+											</a>
+											<a class="tooltipped modal-trigger" data-position="top"
+											   href="#modal-remover-registro" th:attr="data-codigo=${conta.id}, data-nome=${'compra cód.: ' + conta.id}"
+											   data-delay="50" data-tooltip="Excluir" style="margin-left: 9px;">
+											   
+											   <i class="tiny material-icons">delete</i>
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="9" th:if="${pagina.vazia}">
+											Nenhum registro encontrado!
+										</td>	
+									</tr>
+								</tbody>
+							</table>							
+						</div> <!-- card-content -->
+					</div>	 <!-- card hoverable -->
+				</div>
+				<div th:replace="/fragments/paginacao :: Pagination(${pagina})"></div>
+			</div> <!-- row -->
+		
+		</div> <!-- card panel -->
+	</div><!-- card  -->
+	
+	<div id="modal-remover-registro" class="modal">
+		<div class="modal-content">
+			<h5>Exclusão Conta</h5>
+			<span>Confirma a exclusão de?</span>
+		</div>
+		<div class="modal-footer">
+			<form th:attr="data-url-remover=@{/contas/delConta}" th:action="${'/contas/delConta' + id}" th:method="DELETE">
+				<button type="submit" class="modal-action modal-close waves-effect waves-light btn red darken-1"
+						style="margin: 5px;">Sim</button>
+				<a href="#" class="modal-action modal-close waves-effect waves-light btn teal darken-3">Não</a>
+			</form>
+		</div>
+	</div>
+	
+</div>
+</div>
+
+</div>
+
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/controle01.js}"></script>
+
+</th:block>
+</body>
+
+</html>

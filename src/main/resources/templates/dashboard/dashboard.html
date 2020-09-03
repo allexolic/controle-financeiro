@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}">
+
+<head>
+	<title>Dashboard</title>
+
+</head>	  
+
+<body>
+
+<section layout:fragment="conteudo">
+	<div class="container">
+		<div class="section">
+			<div class="card">
+				<div class="card-content">
+					<div class="row">
+						<div class="col m4">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<div class="card-panel teal green accent-2">	
+									Total compras:<span class="badge">
+														<a th:text="${totalCompras}" class="black-text"
+														   style="font-size: 30px;"></a>
+												  </span>	
+									</div>
+								</div>
+							</div>	
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col m4">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<div class="card-panel teal green accent-2">	
+									Total de compras mês :	<span class="badge">
+																<a th:text="${totalComprasMes}" class="black-text"
+																   style="font-size: 30px;"></a>
+															</span>	
+									</div>
+								</div>
+							</div>	
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col m4">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<div class="card-panel teal green accent-2">	
+									total mês(R$):	<span class="badge">
+																<a th:text="${valorTotalMes}" 
+																   class="black-text"
+																   style="font-size: 30px;"></a>
+													</span>	
+									</div>
+								</div>
+							</div>	
+						</div>											
+					</div>	
+	
+	    		</div>
+	    	</div>
+		</div>	
+	</div>
+
+</section>
+</body>
+</html>

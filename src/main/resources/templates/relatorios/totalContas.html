@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Total contas</title>
+</head>	 
+<body>
+<div layout:fragment="conteudo">
+	<div class="container">
+		<div class="section">
+			<div class="row">
+				<div class="card hoverable">
+					<div class="card-content black-text">
+						<span class="card-title">Relatório de total contas</span>
+						<div class="row">
+							<form class="col s12" th:action="@{/relatorios/totalContas}" th:object="${relatorioTotalContas}" 
+								  method="post" target="_blank">
+								<div class="row">
+									<div class="input-field col m6 s12">
+										<input id="dataInicio" type="text" class="datepicker" th:field="*{dtDe}"/>
+										<label for="dataInicio">Data início</label>
+									</div>
+									<div class="input-field col m6 s12">
+										<input id="dataFim" type="text" class="datepicker" th:field="*{dtAte}"/>
+										<label for="dataFim">Data fim</label>								
+									</div>
+								</div>
+								<button type="submit" class="btn waves-effect waves-light">Emitir
+									<i class="material-icons right">send</i>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body> 
+</html>

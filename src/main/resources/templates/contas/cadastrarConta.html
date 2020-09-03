@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title th:text="${id == null ? 'Cadastrar conta' : 'Editar conta'}"></title>	
+
+</head>  
+<body>
+	<div layout:fragment="conteudo">
+		<div class="container">
+			<div th:if="${message}">
+				<h6 id="message" style="color: white;" class="message" th:text="${message}"></h6>
+			</div>
+			<div th:if="${messageErro}">
+				<h6 id="messageErro" style="color: white;" class="messageErro" th:text="${messageErro}"></h6>
+			</div>			
+			<div class="card">
+				<div class="card-panel">
+					<div class="row">
+						<form class="col s12" th:action="@{/contas/add}" th:object="${conta}" method="post"
+							  enctype="multipart/form-data">
+							<input type="hidden" th:field="*{id}" />
+							<input type="hidden" th:field="*{flPago}" />
+							<div class="row">								
+								<div class="input-field s12 col m6">
+									<select id="nmDoc" name="nmDoc" autofocus="autofocus" th:field="*{nmDoc}" 
+									        class="validate" required="required" 
+									        aria-required="true"
+									        th:classappend="${#fields.hasErrors('nmDoc')} ? invalid">
+										<option value="0" disabled selected>Selecione</option>
+										<option th:each="tipoDoc : ${tipoDocumento}"
+												th:text="${tipoDoc.nomeConta}"
+												th:value="${tipoDoc.id}"></option>
+									</select>	   
+									<label for="nmDoc" data-error="Nome é obrigatório.">Nome documento</label>
+								</div>
+								<div class="input-field s12 col m3">
+									<input id="dtVencimento" type="text" autocomplete="off" placeholder="dd/mm/aaaa"
+										   class="validate datepicker" th:field="*{dtVencimento}"/>
+									<label for="dtVencimento">Data vencimento</label>
+								</div>
+								<div class="input-field s12 col m3">
+									<input id="valorDoc" type="text" autocomplete="off" placeholder="Valor documento"
+										   class="validate js-moeda" th:field="*{valorDoc}" />
+									<label for="valorDoc">Valor doc.</label>
+								</div>
+								
+							</div>
+							<div class="row">
+								<div class="input-field s12 col m10">
+									<input id="codBarras" type="text" autocomplete="off" placeholder="Código de barras"
+										   class="validate" th:field="*{codBarras}"/>
+									<label for="codBarras">Código de barras</label>
+								</div>
+								<div class="input-field s12 col m2">
+									<a class="tooltipped" id="copyText" data-tooltip="Copiar" href="#">
+									<i class="material-icons">content_copy</i>
+									</a>	
+								</div>							
+							</div>
+							<div class="row">
+								<div class="input-field s12 col m4">
+									<select id="statusConta" th:field="*{statusConta}">
+										
+										<option th:each="statusConta : ${listaStatusConta}"
+												th:text="${statusConta.nmStatusConta}"
+												th:value="${statusConta}">											
+										</option>
+									</select>
+									<label for="statusConta">Status</label>
+								</div>
+								<div class="input-field s12 col m3" id="dtPago">
+									<input type="text" id="dtPagamento" class="datepicker" placeholder="dd/mm/aaaa"
+										   th:field="*{dtPagamento}"/>
+									<label for="dtPagamento">Data pagamento</label>
+								</div>
+								<div class="input-field s12 col m3" id="vlPago">
+									<input type="text" id="valorPago" autocomplete="off" placeholder="Valor pago"
+										   class="validate js-moeda" th:field="*{valorPago}"/>
+									<label for="valorPago">Valor pago</label>
+								</div>
+								<div th:if="${conta.flPago == 1}">
+									<a class="tooltipped modal-trigger" href="#vincular-documento"
+									   data-tooltip="Anexar">
+										<i class="small material-icons">archive</i>
+									</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field s12 col m8">
+									<span>Comprovante</span>
+									<table class="responsive-table highlight">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>Ação</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="documento : ${listaDocumentos}">
+												<td th:text="${documento}"></td>
+												<td>
+													<!-- Excluir documento -->													
+													<a th:href="@{/awss3/deleteFile/(conta=${conta.id})}">excluir</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>	
+							</div>
+
+							<button id="infoClick" class="btn waves-effect waves-light" type="submit" name="action">
+								Salvar<i class="material-icons right">send</i>
+							</button>							
+							
+							
+						</form>
+						
+					</div>
+
+				</div>
+				<div class="card-action">
+					<a th:href="@{/contas}">Voltar</a>
+				</div>	
+			</div>
+
+				
+				<div id="vincular-documento" class="modal">
+					<div class="modal-content">
+						<h6>Vincular comprovante</h6>
+					</div>
+					<div class="modal-footer">						
+						<form method="post" th:action="@{/awss3/upload}" enctype="multipart/form-data">
+							<input type="hidden" th:object="${conta}" th:field="*{id}" />
+							
+								<input type="file" name="file" required/>						
+								
+								<button type="submit" class="modal-action waves-effect waves-light btn" 
+									    style="margin: 5px;">Salvar</button>
+							
+						</form>
+						
+					</div>
+				</div>
+				
+		</div>
+	</div>
+		
+	
+	
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/conta-pagar-ver-campos.js}"></script>
+</th:block>	
+</body>
+
+</html>

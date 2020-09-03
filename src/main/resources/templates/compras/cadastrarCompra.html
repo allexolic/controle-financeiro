@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="/layout/layoutPadrao">
+
+<head>
+	<title th:text="${codigo == null ? 'Cadastrar Compra' : 'Editar Compra'}"></title>
+</head>
+
+<section layout:fragment="conteudo">
+	<div class="container">
+		<div class="section">
+			<!-- Mensagens -->
+			
+			<!-- Mensagens -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="card hoverable">
+						<div class="card-content black-text">
+							<span class="card-title" th:text="${codigo == null ? 'Cadastrar Compra' : 'Gerenciar Compra'}"></span>
+							
+							<div class="row">
+								<form class="col s12" th:action="@{/compras/addItem/{codigo}(codigo=${compra.codigo})}" method="post" >
+									<div class="row">
+										<div class="input-field s12 col m1">
+											<input id="codigo" type="text" th:value="${compra.codigo}" 
+											       disabled/>
+											<label for="codigo">Cód.</label>
+										</div>										
+										<div class="input-field s12 col m6">
+											<!--
+											<input id="nmEstabelecimento" type="text" class="validate" th:value="${compra.nmEstabelecimento}" 
+												   placeholder="Nome do estabelecimento" th:field="*{compra.nmEstabelecimento}"/>
+											-->	   
+											<select id="estabelecimento" th:field="*{compra.estabelecimento}">
+												<option value="">Selecione</option>
+												<option th:each="estabelecimento : ${listaEstabelecimento}"
+												 	    th:value="${estabelecimento.id}"
+												 	    th:text="${estabelecimento.nmEstabelecimento}"></option>
+											</select>
+											<label for="estabelecimento">Estabelecimento</label>
+										</div>
+										
+										<div class="input-field s12 col m2">
+											<input id="dataCompra" type="text" class="datepicker" th:value="${compra.dataCompra}"
+												   placeholder="00/00/0000" th:field="*{compra.dataCompra}" />
+											<label for="dataCompra">Data Compra</label>
+										</div>
+										
+										<div class="input-field s12 col m2">
+											<input id="valorCompra" type="text" class="validate" th:value="${compra.valorCompra}" 
+												   th:field="*{compra.valorCompra}" readonly />
+											<label for="valorCompra">Valor Compra</label>
+										</div>
+										
+										<div class="input-field s12 col m2">
+											<input id="qtdItem" type="hidden" th:value="${compra.qtdItem}"
+												   th:field="*{compra.qtdItem}" />
+										</div>								
+										
+									</div>
+								  
+									<div class="row">		
+									 
+										<div class="input-field s12 col m7">
+											<!--  
+											<select id="produto" class="validate" th:value="${compraItem.produto}" th:field="*{compraItem.produto}">
+												<option value="">Selecione o produto</option>
+												<option th:each="produto : ${listaProdutos}"
+														th:text="${produto.nomeProduto}"
+														th:value="${produto.codigo}" >
+												</option>
+											</select>
+											<label for="produto">Produto</label>
+											-->
+											<i class="material-icons prefix">textsms</i>
+											<input type="text" id="autocomplete-input-produto"
+												   placeholder="Pesquise pelo nome do produto"
+												   autocomplete="off" class="autocomplete" 
+												   th:field="*{produto.nomeProduto}"  />
+											<label for="autocomplete-input-produto">Produto</label>
+											<input type="hidden" name="produto" id="produto"  value="" th:value="${compraItem.produto}" th:field="*{compraItem.produto}"/>	   
+										</div>	
+										<div class="input-field s12 col m1">
+											<input id="nuQuantidade" type="number" class="validate" th:value="${compraItem.nuQuantidade}"
+												   th:field="*{compraItem.nuQuantidade}" placeholder="1" autocomplete="off"/>
+											<label for="nuQuantidade">QTD</label>
+										</div>		
+										<div class="input-field s12 col m1">
+											<input id="peso" type="text" class="validate" th:value="${compraItem.peso}"
+												   th:field="*{compraItem.peso}" placeholder="0"/>
+											<label for="peso">Peso</label>
+										</div>
+										<div class="input-field s12 col m1">
+											<input id="valorProduto" type="text" class="validate js-moeda" th:value="${compraItem.valorProduto}"
+												   th:field="*{compraItem.valorProduto}" placeholder="0,00" />
+											<label for="valorProduto">Valor</label>
+										</div>			
+									 	<div class="input-field s12 col m1">
+									 		<input id="valorDesconto" type="text" class="validate js-moeda" th:value="${compraItem.valorDesconto}"
+									 			   th:field="*{compraItem.valorDesconto}" placeholder="0,00"/>
+									 		<label for="valorDesconto">Desconto</label>
+									 	</div>
+																				 									
+									</div>	
+										<div class="input-field" align="right">
+											<button class="waves-effect small btn"
+											   th:action="@{/compras/addItem}">Adicionar Item
+											<i class="material-icons right">add</i>
+											</button>											
+										</div>	<br/>
+									 
+									<div class="row">
+										<div class="col s12 m12">
+											<div class="card hoverable">
+												<div class="card-content black-text" id="table">
+												<span class="table-add card-title">Itens</span>
+												
+												<table class="responsive-table highlight">
+													<thead>
+														<tr>
+															<th>Produto</th>
+															<th>Quantidade</th>
+															<th>Valor</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="compraItem : ${pagina.conteudo}">
+															<td th:text="${compraItem.produto.nomeProduto}"></td>
+															<td th:text="${compraItem.nuQuantidade}"></td>
+															<td th:text="${compraItem.valorProduto}"></td>
+															<td>
+																<a class="tooltipped" data-tooltip="Excluir" 
+																   th:href="@{/compras/delCompraItem/{codigo}(codigo=${compraItem.codigo}, compra=${compraItem.compra.codigo})}">
+																	<i class="tiny material-icons">delete</i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="9" th:if="${pagina.vazia}">
+																Nenhum item cadastrado!
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												</div>
+											</div>
+										</div>
+										<!-- Paginação -->
+										<div th:replace="/fragments/paginacao :: Pagination (${pagina})"></div>
+									</div>
+									
+		                            <button class="btn waves-effect waves-light" 
+		                               th:action="@{/compras/addItem}">
+									Finalizar Compra <i class="material-icons right">send</i>
+									</button>	
+								</form>
+							
+
+							</div>
+							
+						</div>
+						
+						<div class="card-action">
+							<a th:href="@{/compras}">Voltar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+</section>
+
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/compra.autocomplete-produto.js}"></script>
+	<script th:src="@{/javascript/controle01.js}"></script>
+</th:block>
+
+</html>	  

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title th:text="${id == null ? 'Cadastrar Usuário' : 'Editar Usuário'}"></title>
+
+</head>	  
+
+<body>
+<div layout:fragment="conteudo"> 
+	<div class="container">
+		<div th:if="${messageAdd}">
+			<h6 id="messageAdd" style="color: white;" class="messageAdd" th:text="${messageAdd}"></h6>
+		</div>
+		<div th:if="${messageEdit}">
+			<h6 id="messageEdit" style="color: white;" class="messageEdit" th:text="${messageEdit}"></h6>
+		</div>
+		<div class="card">
+			<div class="card-panel">
+				
+				<div class="row">
+					<form class="col s12" th:action="@{/usuarios/add}" th:object="${usuario}" method="post">
+						<input type="hidden" th:field="*{id}"/>
+						<div class="row">
+							<div class="input-field col m4 s12">
+								<input id="username" type="text" class="validate" th:field="*{username}" 
+									   placeholder="Login usuário" required autofocus="autofocus"
+									   maxlength="10"/>
+								<label for="username">Usuário</label>	
+							</div>
+							<div class="input-field col m8 s12">
+								<input id="nome" type="text" class="validate" th:field="*{nome}"
+									   placeholder="Nome usuário" required/>
+								<label for="nome">Nome usuário</label>
+							</div>
+						</div>
+						<div class="row">						
+							<div class="input-field col m4 s12">		
+								<div th:if="${usuario.id == null}">			
+									<input id="password" type="password" class="validate" th:field="*{password}"
+										   placeholder="Senha" required />
+									<label for="password">Senha</label>	 	   
+								</div>																	
+							</div>							
+						</div>
+						<div class="row">
+							<div class="input-field col m6 s12">								
+								<input type="text" id="email" name="email" class="validate" th:field="*{email}"
+									   placeholder="Email" autocomplete="off"/>
+								<label for="email">E-mail</label>
+							</div>
+							<div class="input-field col m6 s12">
+								<select multiple id="nmRole" th:field="*{permissoes}">
+									<option value="" disabled>Selecione</option>
+									<option th:each="permissao : ${ListaPermissoes}"
+											th:text="${permissao.name}"
+											th:value="${permissao.id}">
+									</option>
+								</select>
+								<label for="nmRole">Permissão</label>
+							</div>
+						</div>
+						<button id="btnClick" class="btn waves-effect waves-light" type="submit" name="action">
+							Salvar<i class="material-icons right">send</i>
+						</button>
+					</form>
+				</div>
+				
+			</div>
+			<div class="card-action">
+				<a th:href="@{/usuarios}">Voltar</a>
+			</div>
+		</div>
+	</div>
+</div>
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/toast-message.js}"></script>
+</th:block>	
+</body>
+
+</html>	

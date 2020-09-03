@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Usuários</title>
+
+</head>	  
+
+<body>
+<div layout:fragment="conteudo"> 
+	<div class="container">
+		<h5>Usuários</h5>
+		<div class="input-field col m12 s12 l4" align="right">
+			<a class="waves-effect waves-light btn" th:href="@{/usuarios/add}">Cadastrar</a>
+		</div>
+		<div class="card">
+			<div class="card-panel">
+			
+				<div class="row">
+					<form class="col s12" method="get" th:action="@{/usuarios}" th:object="${usuario}">
+						<div class="row">
+							<div class="input-field col m12 s12 l4">
+								<i class="material-icons prefix">account_circle</i>
+								<input id="icon_prefix" type="text" th:field="*{username}"/>
+								<label for="icon_prefix">Pesquisa por nome ou usuário</label>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="row">
+					<div class="col s12 m12">
+						<div class="card hoverable">
+							<div class="card-content black-text">
+								<span class="card-title">Usuários</span>
+								
+								<table class="responsive-table highlight">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Usuário</th>
+											<th>Nome usuário</th>
+											<th>Ações</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="usuario : ${pagina.conteudo}">
+											<td th:text="${usuario.id}"></td>
+											<td th:text="${usuario.username}"></td>
+											<td th:text="${usuario.nome}"></td>
+											<td>
+												<a class="tooltipped" data-position="top" data-delay="50"
+												   data-tooltip="Editar" th:href="@{/usuarios/{codigo}(codigo=${usuario.id})}">
+													
+													<i class="tiny material-icons">mode_edit</i>
+												</a>
+												<a class="tooltipped modal-trigger" data-position="top"
+												   href="#modal-remover-registro" th:attr="data-codigo=${usuario.id}, data-nome=${usuario.username}"
+												   data-delay="50" data-tooltip="Excluir" style="margin-left: 9px;">
+												   
+												   <i class="tiny material-icons">delete</i>
+												</a>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="9" th:if="${pagina.vazia}">
+												Nenhum registro encontrado!
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					
+					<div th:replace="/fragments/paginacao :: Pagination (${pagina})"></div>
+				
+				</div>
+				
+			</div>
+		</div>
+		
+		<div id="modal-remover-registro" class="modal">
+			
+			<div class="modal-content">
+				<h5>Exclusão Usuário</h5>
+				<span>Confirma a exclusão de?</span>
+			</div>
+			
+			<div class="modal-footer">
+			  
+				<form th:attr="data-url-remover=@{/usuarios/delUsuario}" th:action="${'/usuarios/delUsuario' + id}" th:method="DELETE">
+					<button type="submit" class="modal-action modal-close waves-effect waves-light btn red darken-1"
+							style="margin: 5px">Sim</button>
+					<a href="#" class="modal-action modal-close waves-effect waves-light btn teal darken-3">Não</a>		
+				</form>
+			</div>
+		</div>
+		
+	</div>
+
+
+</div>
+<th:block layout:fragment="javascript-controle">
+	<script th:src="@{/javascript/controle01.js}"></script>
+</th:block>
+</body>
+
+</html>
