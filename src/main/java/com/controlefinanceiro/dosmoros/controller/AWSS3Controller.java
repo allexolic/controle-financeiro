@@ -42,7 +42,7 @@ public class AWSS3Controller {
 		awsS3Service.uploadFile(multipartFile);
 		final String response = "["+ multipartFile.getOriginalFilename() + "] vinculado com sucesso.";
 		
-		repDocs.saveFile(multipartFile.getOriginalFilename(), "allexolic@gmail.com", "", endpointUrl);
+		repDocs.saveFile(multipartFile.getOriginalFilename(), "meuemail@gmail.com", "", endpointUrl);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		

@@ -11,7 +11,9 @@
 		<![CDATA[SELECT tpc.nm_conta AS "nome conta", cpa.status_conta AS "status conta", 
               SUM(cpa.vl_doc) AS "valor total conta",
 		      SUM(cpa.vl_doc - cpa.vl_pago) AS "valor total desconto", 
-		      SUM(cpa.vl_pago) AS "valor total pago"
+		      SUM(cpa.vl_pago) AS "valor total pago",
+		      cast(DATE_PART('year', cpa.dt_vencimento) AS VARCHAR(4)) AS "Ano"
+		      
   FROM conta_pagar cpa
 
 INNER JOIN tipo_conta tpc
@@ -21,7 +23,7 @@ WHERE cpa.status_conta <> 'PENDENTE'
   
   AND cpa.dt_vencimento BETWEEN  $P{dtDe} AND  $P{dtAte} 
    
-GROUP BY tpc.nm_conta, cpa.status_conta
+GROUP BY tpc.nm_conta, cpa.status_conta, DATE_PART('year',cpa.dt_vencimento)
 
 ORDER BY tpc.nm_conta]]>
 	</queryString>
@@ -42,6 +44,9 @@ ORDER BY tpc.nm_conta]]>
 	<field name="valor total pago" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="valor total pago"/>
 	</field>
+	<field name="Ano" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Ano"/>
+	</field>
 	<variable name="valor total pago1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{valor total pago}]]></variableExpression>
 	</variable>
@@ -60,9 +65,9 @@ ORDER BY tpc.nm_conta]]>
 		</band>
 	</title>
 	<columnHeader>
-		<band height="51" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<staticText>
-				<reportElement x="100" y="10" width="120" height="20" uuid="269d2c48-6750-462c-abb6-a1594233ccae">
+				<reportElement x="40" y="11" width="120" height="20" uuid="269d2c48-6750-462c-abb6-a1594233ccae">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="409fd4f1-0ba6-427b-a22e-3b8f1a47d53a"/>
 				</reportElement>
 				<textElement>
@@ -71,7 +76,7 @@ ORDER BY tpc.nm_conta]]>
 				<text><![CDATA[nome conta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="230" y="11" width="100" height="19" uuid="20e3d0dd-ad26-42ab-86dd-5013ee9d179a">
+				<reportElement x="170" y="12" width="100" height="19" uuid="20e3d0dd-ad26-42ab-86dd-5013ee9d179a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e243d4e3-62dd-4871-8e8f-bf2525f0d9a5"/>
 				</reportElement>
 				<textElement>
@@ -80,7 +85,7 @@ ORDER BY tpc.nm_conta]]>
 				<text><![CDATA[status conta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="330" y="11" width="100" height="19" uuid="8a9cdb5d-ee5f-42e7-b70d-2d32abf31ca4">
+				<reportElement x="270" y="12" width="100" height="19" uuid="8a9cdb5d-ee5f-42e7-b70d-2d32abf31ca4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="369520c8-674c-4a69-a8bd-c538ef0269df"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -89,7 +94,7 @@ ORDER BY tpc.nm_conta]]>
 				<text><![CDATA[valor total conta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="10" width="120" height="20" uuid="5d6b0781-0dfa-4985-bfd2-e2c1f428b8b5">
+				<reportElement x="380" y="11" width="120" height="20" uuid="5d6b0781-0dfa-4985-bfd2-e2c1f428b8b5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29922551-fb9c-4b53-a76b-5daaa118bc37"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -98,7 +103,7 @@ ORDER BY tpc.nm_conta]]>
 				<text><![CDATA[valor total desconto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="580" y="10" width="110" height="20" uuid="237e48cb-e22a-4740-96a1-058d43d95f22">
+				<reportElement x="500" y="11" width="110" height="20" uuid="237e48cb-e22a-4740-96a1-058d43d95f22">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="79785ccd-db4b-41d0-883e-1db35258541f"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -107,48 +112,60 @@ ORDER BY tpc.nm_conta]]>
 				<text><![CDATA[valor total pago]]></text>
 			</staticText>
 			<line>
-				<reportElement x="99" y="31" width="591" height="1" uuid="3b395299-9251-4b96-a8a1-e4beb9a1edf8">
+				<reportElement x="39" y="31" width="641" height="2" uuid="3b395299-9251-4b96-a8a1-e4beb9a1edf8">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 			</line>
+			<staticText>
+				<reportElement x="640" y="12" width="100" height="21" uuid="170e4b93-6a8e-41e7-a3cb-fc5028454cf4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0091c778-fc4a-4c73-868e-5c21448d49d5"/>
+				</reportElement>
+				<text><![CDATA[Ano]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="49" splitType="Stretch">
+		<band height="46" splitType="Stretch">
 			<textField>
-				<reportElement x="100" y="10" width="120" height="20" uuid="c012ce83-847e-4ff4-82ca-71d28cc2e821">
+				<reportElement x="40" y="11" width="120" height="20" uuid="c012ce83-847e-4ff4-82ca-71d28cc2e821">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="409fd4f1-0ba6-427b-a22e-3b8f1a47d53a"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{nome conta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="230" y="10" width="100" height="20" uuid="5b11f66f-bf45-4604-affd-7797cad40207">
+				<reportElement x="170" y="11" width="100" height="20" uuid="5b11f66f-bf45-4604-affd-7797cad40207">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e243d4e3-62dd-4871-8e8f-bf2525f0d9a5"/>
 				</reportElement>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{status conta}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00;¤-#,##0.00">
-				<reportElement x="330" y="10" width="100" height="20" uuid="8a209056-a2c9-4703-a2eb-8a2dfe4869e4">
+				<reportElement x="270" y="11" width="100" height="20" uuid="8a209056-a2c9-4703-a2eb-8a2dfe4869e4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="369520c8-674c-4a69-a8bd-c538ef0269df"/>
 				</reportElement>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{valor total conta}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00;¤-#,##0.00">
-				<reportElement x="440" y="10" width="120" height="20" uuid="d479813b-b766-4d96-b264-6338938dccee">
+				<reportElement x="380" y="11" width="120" height="20" uuid="d479813b-b766-4d96-b264-6338938dccee">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29922551-fb9c-4b53-a76b-5daaa118bc37"/>
 				</reportElement>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{valor total desconto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00;¤-#,##0.00">
-				<reportElement x="580" y="10" width="110" height="20" uuid="e109c4a4-b139-4860-abf3-8bdbb43411bf">
+				<reportElement x="500" y="10" width="110" height="20" uuid="e109c4a4-b139-4860-abf3-8bdbb43411bf">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="79785ccd-db4b-41d0-883e-1db35258541f"/>
 				</reportElement>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{valor total pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="10" width="35" height="20" uuid="3cdb9df2-494b-40ef-a8a2-86887e0e2f28">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0091c778-fc4a-4c73-868e-5c21448d49d5"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Ano}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -169,7 +186,7 @@ ORDER BY tpc.nm_conta]]>
 	<summary>
 		<band height="45" splitType="Stretch">
 			<textField pattern="¤ #,##0.00;¤-#,##0.00">
-				<reportElement x="600" y="20" width="90" height="20" uuid="6c739174-39f1-4f8f-b23b-a1e70940a266"/>
+				<reportElement x="530" y="10" width="90" height="20" uuid="6c739174-39f1-4f8f-b23b-a1e70940a266"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>

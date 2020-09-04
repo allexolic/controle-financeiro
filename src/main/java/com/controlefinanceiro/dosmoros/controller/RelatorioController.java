@@ -58,6 +58,7 @@ public class RelatorioController {
 			
 			final OutputStream outputStream = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+		
 		}catch(JRException e) {
 			
 			e.printStackTrace();
