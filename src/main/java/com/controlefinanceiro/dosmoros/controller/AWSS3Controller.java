@@ -2,8 +2,11 @@ package com.controlefinanceiro.dosmoros.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.core.io.ByteArrayResource;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.DeleteMapping;
 //import org.springframework.ui.Model;
 //import org.springframework.web.bind.annotation.GetMapping;
@@ -73,6 +76,14 @@ public class AWSS3Controller {
 		 repDocs.deleteFile(conta.getId());
 		 
 		return "redirect:/contas/" + conta.getId();
+	}
+	
+	@GetMapping(value="/download")
+	public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value = "fileName") final String keyName) {
+		final byte[] doc = awsS3Service.downloadFile(keyName);
+		final ByteArrayResource resource = new ByteArrayResource(doc);
+		return ResponseEntity.ok().contentLength(doc.length).header("Content-type", "application/octet-stream")
+							 .header("Content-disposition", "attachment; filename=\"" + keyName + "\"").body(resource);
 	}
 	
 }

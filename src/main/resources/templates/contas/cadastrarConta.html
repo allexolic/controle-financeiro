@@ -86,7 +86,7 @@
 								<div th:if="${conta.flPago == 1}">
 									<a class="tooltipped modal-trigger" href="#vincular-documento"
 									   data-tooltip="Anexar">
-										<i class="small material-icons">archive</i>
+										<i class="small material-icons">file_upload</i>
 									</a>
 								</div>
 							</div>
@@ -97,7 +97,8 @@
 										<thead>
 											<tr>
 												<th>Nome</th>
-												<th>Ação</th>
+												<th>Excluir</th>
+												<th>Baixar</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -105,7 +106,14 @@
 												<td th:text="${documento}"></td>
 												<td>
 													<!-- Excluir documento -->													
-													<a th:href="@{/awss3/deleteFile/(conta=${conta.id})}">excluir</a>
+													<a th:href="@{/awss3/deleteFile/(conta=${conta.id})}">
+														<i class="small material-icons">delete_forever</i>
+													</a>													
+												</td>
+												<td>
+													<a th:href="@{/awss3/download/(fileName=${documento})}">
+													<i class="small material-icons">file_download</i>
+													</a>
 												</td>
 											</tr>
 										</tbody>

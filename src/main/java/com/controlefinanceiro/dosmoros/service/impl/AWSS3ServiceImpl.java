@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,9 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.controlefinanceiro.dosmoros.service.AWSS3Service;
 
 @Service
@@ -78,4 +82,21 @@ public class AWSS3ServiceImpl implements AWSS3Service{
 		amazonS3.deleteObject(deleteObjectRequest);
 	}
 	*/
+		
+	@Async
+	public byte[] downloadFile(final String keyName) {
+		byte[] content = null;
+		LOGGER.info("Downloading of file..." + keyName);
+		final S3Object s3Object = amazonS3.getObject(bucketName, keyName);
+		final S3ObjectInputStream s3Stream = s3Object.getObjectContent();
+		
+		try {
+			content = IOUtils.toByteArray(s3Stream);
+			LOGGER.info("Arquivo baixado com sucesso!");
+			s3Object.close();
+		}catch(final IOException e) {
+			LOGGER.info("Erro = " + e.getMessage());
+		}
+		return content;
+	}
 }

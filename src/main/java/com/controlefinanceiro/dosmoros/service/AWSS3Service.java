@@ -6,6 +6,7 @@ public interface AWSS3Service {
 
 	void uploadFile(MultipartFile multipartFile);
 	
+	byte[] downloadFile(String keyName);
 	//void downloadFile(String keyName, String downloadFilePath);
 	void deleteFile(String FileName);
 }
