@@ -21,14 +21,14 @@
 			<div class="row">
 				<form class="col s12" method="get" th:action="@{/contas}" th:object="${conta}">
 					<div class="row">
-						<div class="input-field col m12 s12 l4">
+						<div class="input-field col m12 s12 l2">
 							<i class="material-icons prefix">account_circle</i>
 							<select id="icon_prefix" th:field="*{statusConta}">
 								<option value="" selected>Selecione</option>
 								<option value="PENDENTE">Pendente</option>
 								<option value="PAGO">Pago</option>
 							</select>
-							<label for="icon_prefix">Pesquisa por status</label>
+							<label for="icon_prefix">Status</label>
 						</div>
 
 						<div class="input-field col m12 s12 l2">
@@ -41,10 +41,18 @@
 							       placeholder="Data até" value=""/>
 							<label for="dataDe">Data até</label>
 						</div>
-						
+						<div class="input-field col m12 s12 l2">
+							<select id="nmDoc" th:field="*{nmDoc}">
+								<option value="0">Selecione</option>
+								<option th:each="doc : ${tipoConta}"
+										th:text="${doc.nomeConta}"
+										th:value="${doc.id}">
+								</option>
+							</select>
+							<label for="nmDoc">Nome</label>
+						</div>
 				        <div class="input-field col m12 s12 l4">
-							<button type="submit" class="waves-effect waves-light btn">Pesquisar</button>
-						    
+							<button type="submit" class="waves-effect waves-light btn">Pesquisar</button>						    
 						</div>
 					</div>
 					

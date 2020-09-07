@@ -74,15 +74,18 @@ public class ContaController {
 				status = "";
 			}
 		
+			Long nomeConta = (long) conta.getNmDoc();
+			
 		PageWrapper<Conta> pageWrapper = new PageWrapper<>(contas.porStatus(status, 
 														   sdf.format(dtVenc),
 														   sdf.format(dtVencAte),
+														   nomeConta,
 														   pageable),
 														   httpServletRequest);
 		
 		mv.addObject("pagina", pageWrapper);		
-		
-		//System.out.println(sdf.format(dtVenc));
+		mv.addObject("tipoConta", tipoContas.listaTipoConta());
+		//System.out.println(status + " " + sdf.format(dtVenc) + " "+ sdf.format(dtVencAte) + " " + nomeConta);
 		return mv;
 	}
 	
