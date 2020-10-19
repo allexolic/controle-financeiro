@@ -27,6 +27,11 @@ public interface Usuarios extends JpaRepository<Usuario, Long>{
 			+ " where u.username like %?1%")
 	List<UsuarioDTO> filtradas(String username);
 	
+	@Query(value= "select id from usuario where nm_login = ?1", nativeQuery=true)
+	int usuarioId(String name);
+	
+	@Query(value="select id_visibilidade from usuario u where u.id = ?1", nativeQuery=true)
+	int usuarioVisibilidade(int id);
 	/*
 	@Query(value="update usuario set nm_usuario = " + "(:nome)" + " where "
 			+ " id = " + "(:id)", nativeQuery=true)

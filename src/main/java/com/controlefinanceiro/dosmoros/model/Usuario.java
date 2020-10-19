@@ -42,6 +42,9 @@ public class Usuario {
 	@Column(name="nm_email", length=175)
 	private String email;
 	
+	@Column(name="id_visibilidade")
+	private int visibilidade;
+	
 	public Long getId() {
 		return id;
 	}
@@ -88,6 +91,14 @@ public class Usuario {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public int getVisibilidade() {
+		return visibilidade;
+	}
+
+	public void setVisibilidade(int visibilidade) {
+		this.visibilidade = visibilidade;
 	}
 	
 	

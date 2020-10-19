@@ -36,3 +36,4 @@ build/
 /Procfile.txt
 /mvnw.cmd
 /mvnw
+.env

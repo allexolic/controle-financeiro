@@ -56,7 +56,7 @@ public class UsuariosService implements UserDetailsService {
 		usuario.setNome(usuario.getNome());
 		usuario.setEmail(usuario.getEmail());
 		usuario.setPermissoes((List<Permissao>) usuario.getPermissoes());
-		
+		usuario.setVisibilidade(usuario.getVisibilidade());
 		usuarios.save(usuario);
 	}
 	

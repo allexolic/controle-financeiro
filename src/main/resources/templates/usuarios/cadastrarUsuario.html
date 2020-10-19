@@ -64,6 +64,35 @@
 								<label for="nmRole">Permissão</label>
 							</div>
 						</div>
+						<div class="row">
+							<div class="input-field col m6 s8">
+								<select id="visibilidade" required th:field="*{visibilidade}">
+									<option value="1">Usuário</option>
+									<option value="2">Administrador</option>
+									<option value="3">Customizado</option>
+								</select>
+								<label for="visibilidade">Visibilidade</label>
+							</div>
+							<div class="input-field col m6 s8" align="center">
+							<a class="tooltipped modal-trigger" data-tooltip="Adicionar"
+							   href="#adicionar-visibilidade">
+								<i class="medium material-icons">add_box</i>
+							</a>
+							</div>
+						</div>
+						<div class="row">
+							<table class="responsive-table highlight">
+								<thead>
+									<tr>
+										<th>Módulo</th>
+										<th>Acesso</th>
+										<th>Ação</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
 						<button id="btnClick" class="btn waves-effect waves-light" type="submit" name="action">
 							Salvar<i class="material-icons right">send</i>
 						</button>
@@ -73,6 +102,38 @@
 			</div>
 			<div class="card-action">
 				<a th:href="@{/usuarios}">Voltar</a>
+			</div>
+		</div>
+		
+		<!-- Modal para adicionar visibilidade -->
+		<div id="adicionar-visibilidade" class="modal" style="height: 300px;">
+			<div class="modal-content">
+				<h6>Adicionar visibilidade</h6>
+			</div>
+			<div class="modal-footer">
+				<form th:action="@{/usuarios/addAcesso}" method="post">
+					<input type="hidden" th:object="${usuario}" th:field="*{id}">
+						<div class="row">
+							<div class="input-field col m6 s8">
+								<select>
+									<option value="1">Contas</option>
+								</select>
+								<label for="modulo">Módulo</label>
+							</div>
+							<div class="input-field col m6 s8">
+								<select multiple id="usuarioAcesso" th:object="${usuario}" th:field="*{username}">
+									<option value="" disabled>Selecione</option>
+									<option th:each="usuarios : ${listaUsuarios}"
+											th:text="${usuarios.username}"
+											th:value="${usuarios.id}">
+									</option>
+								</select>
+								<label for="usuarioAcesso">Acessa de</label>
+							</div>
+						</div>	
+					<button type="submit" class="btn waves-effect waves-light"
+					        style="margin: 5px;">Salvar</button>
+				</form>
 			</div>
 		</div>
 	</div>

@@ -152,8 +152,11 @@
 										<div th:replace="/fragments/paginacao :: Pagination (${pagina})"></div>
 									</div>
 									
+									<input type="hidden" id="usuarioCadastro" th:field="*{compra.usuarioCadastro}"/>
+									<input type="hidden" id="usuarioAtualizacao" th:field="*{compra.usuarioAtualizacao}"/>
+		                            
 		                            <button class="btn waves-effect waves-light" 
-		                               th:action="@{/compras/addItem}">
+		                               th:action="@{/compras/add}">
 									Finalizar Compra <i class="material-icons right">send</i>
 									</button>	
 								</form>

@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
+
 @Entity
+@DynamicUpdate
 @Table(name = "conta_pagar")
 public class Conta {
 
@@ -54,6 +57,12 @@ public class Conta {
 	
 	@Column(name="cd_barras")
 	private String codBarras;
+	
+	@Column(name = "id_usuario_ins")
+	private int usuarioCadastro;
+	
+	@Column(name = "id_usuario_upd")
+	private int usuarioAtualizacao;
 	
 	public Date getDtVencimentoAte() {
 		return dtVencimentoAte;
@@ -133,6 +142,22 @@ public class Conta {
 
 	public void setCodBarras(String codBarras) {
 		this.codBarras = codBarras;
+	}
+
+	public int getUsuarioCadastro() {
+		return usuarioCadastro;
+	}
+
+	public void setUsuarioCadastro(int usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
+	}
+
+	public int getUsuarioAtualizacao() {
+		return usuarioAtualizacao;
+	}
+
+	public void setUsuarioAtualizacao(int usuarioAtualizacao) {
+		this.usuarioAtualizacao = usuarioAtualizacao;
 	}
 
 	

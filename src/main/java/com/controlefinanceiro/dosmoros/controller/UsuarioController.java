@@ -107,4 +107,14 @@ public class UsuarioController {
 		
 		return mv;
 	}
+	
+	@PostMapping("addAcesso")
+	public ModelAndView addVisibilidade (@Valid Usuario usuario) {
+		Long codigo = usuario.getId();
+		ModelAndView mv = new ModelAndView("redirect:/usuarios/" + codigo);
+		
+		mv.addObject("listaUsuarios", repUsuarios.findAll());
+		
+		return mv;
+	}
 }

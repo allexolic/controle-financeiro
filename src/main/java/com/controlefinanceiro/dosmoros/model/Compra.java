@@ -17,11 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
+@DynamicUpdate
 @Table(name = "compra")
 public class Compra {
 
@@ -50,6 +51,12 @@ public class Compra {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="estabelecimento_id")
 	private Estabelecimento estabelecimento;
+	
+	@Column(name="id_usuario_ins")
+	private int usuarioCadastro;
+	
+	@Column(name="id_usuario_upd")
+	private int usuarioAtualizacao;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -99,16 +106,29 @@ public class Compra {
 		this.estabelecimento = estabelecimento;
 	}
 
+	
+	public int getUsuarioCadastro() {
+		return usuarioCadastro;
+	}
+
+	public void setUsuarioCadastro(int usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
+	}
+
+	public int getUsuarioAtualizacao() {
+		return usuarioAtualizacao;
+	}
+
+	public void setUsuarioAtualizacao(int usuarioAtualizacao) {
+		this.usuarioAtualizacao = usuarioAtualizacao;
+	}
+
 	@Override
 	public String toString() {
 		return "Compra [codigo=" + codigo + ", dataCompra=" + dataCompra + ", valorCompra=" + valorCompra
 				+ ", compraItens=" + compraItens + ", qtdItem=" + qtdItem + ", estabelecimento=" + estabelecimento
-				+ "]";
-	}
-
-	
-	
-
+				+ ", usuarioCadastro=" + usuarioCadastro + ", usuarioAtualizacao=" + usuarioAtualizacao + "]";
+	}	
 	
 	
 	

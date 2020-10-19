@@ -19,9 +19,10 @@ public interface Compras extends JpaRepository<Compra, Long>{
 	//@Query("select c from Compra c where ifnull(c.nmEstabelecimento,'') like %?1% order by c.codigo desc")Query Mysql
 	//lower(nullif(coalesce(c.nmEstabelecimento,null,'ND'),'')) like lower(concat('%', concat(?1,'%')))
 	@Query("select c from Compra c inner join Estabelecimento e on e.id = c.estabelecimento "
-			+ " where lower(nullif(coalesce(e.nmEstabelecimento,null,'ND'),'')) "
+			+ " where c.usuarioCadastro = coalesce(nullif(?2,0), c.usuarioCadastro, ?2) "
+			+ " and lower(nullif(coalesce(e.nmEstabelecimento,null,'ND'),'')) "
 			+ " like lower(concat('%', concat(?1,'%'))) order by c.codigo desc")
-	Page<Compra> porLoja(String nmEstabelecimento, Pageable pageable);
+	Page<Compra> porLoja(String nmEstabelecimento, int visibilidade, Pageable pageable);
 	//List<Compra> porLoja(String nmEstabelecimento);
 	
 

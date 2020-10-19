@@ -44,6 +44,7 @@
 											<th>#</th>
 											<th>Usuário</th>
 											<th>Nome usuário</th>
+											<th>Visibilidade</th>
 											<th>Ações</th>
 										</tr>
 									</thead>
@@ -52,6 +53,7 @@
 											<td th:text="${usuario.id}"></td>
 											<td th:text="${usuario.username}"></td>
 											<td th:text="${usuario.nome}"></td>
+											<td th:text="${usuario.visibilidade == 1? 'Usuário' : 'Administrador' }"></td>
 											<td>
 												<a class="tooltipped" data-position="top" data-delay="50"
 												   data-tooltip="Editar" th:href="@{/usuarios/{codigo}(codigo=${usuario.id})}">

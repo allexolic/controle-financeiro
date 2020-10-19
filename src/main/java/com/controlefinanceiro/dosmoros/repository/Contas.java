@@ -21,10 +21,12 @@ public interface Contas extends JpaRepository<Conta, Long>{
 	//Page<Conta> porStatus(StatusConta statusConta, String dtVencimento, Pageable pageable);
 	
 	@Query(value = "select id, dt_vencimento,id_tipo_conta, nm_conta, vl_doc, status_conta, dt_pagamento, vl_pago, fl_pago, "
-			+ " cd_barras from spListarContas (:status, :dtVencimento, :dtVencimentoAte, :nomeConta)" ,
+			+ " cd_barras, id_usuario_ins, id_usuario_upd from spListarContas (:status, :dtVencimento, :dtVencimentoAte, :nomeConta, "
+			+ " :visibilidade)" ,
 		   nativeQuery=true)	
 	Page<Conta> porStatus(@Param("status")String statusConta, @Param("dtVencimento")String dtVencimento, 
-			              @Param("dtVencimentoAte")String dtVencimentoAte, @Param("nomeConta")Long nomeConta, Pageable pageable);
+			              @Param("dtVencimentoAte")String dtVencimentoAte, @Param("nomeConta")Long nomeConta, 
+			              @Param("visibilidade")int visibilidade, Pageable pageable);
 	
 
 }

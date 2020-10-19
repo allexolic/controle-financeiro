@@ -3,6 +3,8 @@ package com.controlefinanceiro.dosmoros.controller;
 
 
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -29,6 +31,7 @@ import com.controlefinanceiro.dosmoros.repository.CompraItens;
 import com.controlefinanceiro.dosmoros.repository.Compras;
 import com.controlefinanceiro.dosmoros.repository.Estabelecimentos;
 import com.controlefinanceiro.dosmoros.repository.Produtos;
+import com.controlefinanceiro.dosmoros.repository.Usuarios;
 import com.controlefinanceiro.dosmoros.service.ComprasService;
 
 
@@ -51,15 +54,26 @@ public class CompraController {
 	@Autowired
 	private Estabelecimentos repEstabelecimento;
 	
-
+	@Autowired
+	private Usuarios repUsuarios;
+	
 	@RequestMapping
-	public String listar(Compra compra, Model model, @PageableDefault(size = 5) Pageable pageable,
+	public String listar(Compra compra, Principal principal, Model model, @PageableDefault(size = 5) Pageable pageable,
 						 HttpServletRequest httpServletRequest) {
 		//String nome = compra.getNmEstabelecimento() == null ? "%" : compra.getNmEstabelecimento();
 	
-		String nome = "%";				
+		String nome = "%";	
 		
-		PageWrapper<Compra> paginaWrapper = new PageWrapper<>(repCompras.porLoja(nome, pageable), httpServletRequest);
+		int idUsuario = repUsuarios.usuarioId(principal.getName());
+		int visibilidade = repUsuarios.usuarioVisibilidade(idUsuario);
+		
+		if(visibilidade == 2) {
+			visibilidade = 0;
+		}else {
+			visibilidade = idUsuario;
+		}
+		
+		PageWrapper<Compra> paginaWrapper = new PageWrapper<>(repCompras.porLoja(nome, visibilidade, pageable), httpServletRequest);
 		
 		model.addAttribute("pagina", paginaWrapper);
 				
@@ -67,13 +81,22 @@ public class CompraController {
 	}
 	
 	@RequestMapping(value="/buscar")
-	public String buscar(Compra compra, Model model, @PageableDefault(size = 5) Pageable pageable,
+	public String buscar(Compra compra, Principal principal, Model model, @PageableDefault(size = 5) Pageable pageable,
 		    @RequestParam(value="loja")String loja,
 			HttpServletRequest httpServletRequest) {
 		
 		String nome = loja == null ? "%" : loja;
-				
-		PageWrapper<Compra> paginaWrapper = new PageWrapper<>(repCompras.porLoja(nome, pageable),
+
+		int idUsuario = repUsuarios.usuarioId(principal.getName());
+		int visibilidade = repUsuarios.usuarioVisibilidade(idUsuario);
+		
+		if(visibilidade == 2) {
+			visibilidade = 0;
+		}else {
+			visibilidade = idUsuario;
+		}
+		
+		PageWrapper<Compra> paginaWrapper = new PageWrapper<>(repCompras.porLoja(nome, visibilidade, pageable),
 															   httpServletRequest);
 		
 		model.addAttribute("pagina", paginaWrapper);
@@ -83,12 +106,23 @@ public class CompraController {
 	}
 	
 	@GetMapping(value = "/add")
-	public ModelAndView adicionar(Compra compra) {
-
+	public ModelAndView adicionar(Compra compra, Principal principal) {
+       
+		int idUsuario = repUsuarios.usuarioId(principal.getName());
+        
 		compra.setValorCompra(0.00000);
 		compra.setQtdItem(0);
 		
-		servCompras.salvar(compra);
+		if(compra.getCodigo() == null) {
+			
+			compra.setUsuarioCadastro(idUsuario);
+			compra.setUsuarioAtualizacao(idUsuario);	
+			servCompras.salvar(compra);
+			
+		}else {
+			compra.setUsuarioAtualizacao(idUsuario);
+			servCompras.salvar(compra);
+		}
 						
 		ModelAndView mv = new ModelAndView(new RedirectView("/compras/novaCompra/" + compra.getCodigo()));
 
@@ -118,17 +152,20 @@ public class CompraController {
 
 	@RequestMapping(value = "/addItem/{codigo}", method = RequestMethod.POST)
 	public ModelAndView addItem(@PathVariable(name = "codigo") Compra codigo, @Valid Compra compra, 
-							    CompraItem compraItem) {
+			                    Principal principal, CompraItem compraItem) {
 		
 		ModelAndView mv = new ModelAndView("redirect:/compras/novaCompra/"+ compra.getCodigo());
 	
 		mv.addObject("listaEstabelecimento", repEstabelecimento.findAllOrderByNome());
 		mv.addObject("listaProdutos", repProdutos.findAll());
-		mv.addObject(compra);
-     
+		mv.addObject(compra);		
+		
         compraItem.setCompra(codigo);
-        compraItem.setCodigo(null);
-       
+        compraItem.setCodigo(null);       
+        
+		int idUsuario = repUsuarios.usuarioId(principal.getName());
+		compra.setUsuarioAtualizacao(idUsuario);
+				
         servCompras.salvar(compra);
         
         
@@ -145,7 +182,7 @@ public class CompraController {
 	
 	@RequestMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable(name = "codigo") Compra compra, CompraItem compraItem, Produto produto,
-			@PageableDefault(size = 5) Pageable pageable, HttpServletRequest httpServletRequest) {
+							   @PageableDefault(size = 5) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("/compras/cadastrarCompra");
 		
 		mv.addObject("listaProdutos", repProdutos.findAll());		

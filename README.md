@@ -9,3 +9,10 @@ Cadastro de compras, contas, produtos e fabricates.
 Atualmente com relatorio de contas.
 
 Upload de documentos AWS S3.
+
+Implantado na plataforma de serviço Heroku
+
+https://young-falls-64691.herokuapp.com/
+
+
+

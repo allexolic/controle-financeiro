@@ -3,6 +3,7 @@ package com.controlefinanceiro.dosmoros.controller;
 
 
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +30,7 @@ import com.controlefinanceiro.dosmoros.model.StatusConta;
 import com.controlefinanceiro.dosmoros.repository.Contas;
 import com.controlefinanceiro.dosmoros.repository.Documentos;
 import com.controlefinanceiro.dosmoros.repository.TipoContas;
+import com.controlefinanceiro.dosmoros.repository.Usuarios;
 import com.controlefinanceiro.dosmoros.service.ContasService;
 
 @Controller
@@ -48,8 +49,11 @@ public class ContaController {
 	@Autowired
 	private TipoContas tipoContas;
 	
+	@Autowired
+	private Usuarios usuarios;
+	
 	@GetMapping
-	public ModelAndView viewContas(Conta conta, @PageableDefault(size = 5) Pageable pageable,
+	public ModelAndView viewContas(Conta conta, Principal principal, @PageableDefault(size = 5) Pageable pageable,
 								   HttpServletRequest httpServletRequest) throws Exception {
 		
 		ModelAndView mv = new ModelAndView("/contas/listarContas");	
@@ -76,16 +80,27 @@ public class ContaController {
 		
 			Long nomeConta = (long) conta.getNmDoc();
 			
+			int idUsuario = usuarios.usuarioId(principal.getName());
+			int idVisibilidade = usuarios.usuarioVisibilidade(idUsuario);
+			
+			if(idVisibilidade == 2) {
+				idVisibilidade = 0;
+			}else {
+				idVisibilidade = idUsuario;
+			}
+			
 		PageWrapper<Conta> pageWrapper = new PageWrapper<>(contas.porStatus(status, 
 														   sdf.format(dtVenc),
 														   sdf.format(dtVencAte),
 														   nomeConta,
+														   idVisibilidade,
 														   pageable),
 														   httpServletRequest);
 		
 		mv.addObject("pagina", pageWrapper);		
 		mv.addObject("tipoConta", tipoContas.listaTipoConta());
 		//System.out.println(status + " " + sdf.format(dtVenc) + " "+ sdf.format(dtVencAte) + " " + nomeConta);
+		
 		return mv;
 	}
 	
@@ -99,8 +114,10 @@ public class ContaController {
 	}
 	
 	@PostMapping("/add")
-	public ModelAndView salvar(@Valid Conta conta, RedirectAttributes attributes) {
-				
+	public ModelAndView salvar(@Valid Conta conta, Principal principal, RedirectAttributes attributes) {
+		
+		int idUsuario;
+		
 		if(conta.getDtPagamento() == null) {
 			conta.setFlPago(0);
 		}else {
@@ -121,11 +138,21 @@ public class ContaController {
 			
 			}
 		}
-
+		
+		idUsuario = usuarios.usuarioId(principal.getName());
+		
+		if(conta.getId() == null) {
+			conta.setUsuarioCadastro(idUsuario);
+			conta.setUsuarioAtualizacao(idUsuario);
 		servContas.salvar(conta);
 		
 		attributes.addFlashAttribute("message", "Conta salva com sucesso.");
-		
+		} else {
+			
+			conta.setUsuarioAtualizacao(idUsuario);
+			servContas.salvar(conta);
+			attributes.addFlashAttribute("message", "Conta atualizada com sucesso.");
+		}
 		Long codigo = conta.getId();
 		
 		return new ModelAndView("redirect:/contas/" + codigo);
