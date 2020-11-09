@@ -12,6 +12,7 @@ import com.controlefinanceiro.dosmoros.model.Compra;
 
 
 
+
 @Repository
 public interface Compras extends JpaRepository<Compra, Long>{
 
@@ -33,4 +34,8 @@ public interface Compras extends JpaRepository<Compra, Long>{
 	@Query("select sum(c.valorCompra) from Compra c where month(c.dataCompra) = month(current_date)"
 			+ " AND YEAR(dataCompra) = YEAR(CURRENT_DATE)")
 	String sumCompras();
+	
+	
+	@Query(value="select * from Compra_inserir(:dsjson)", nativeQuery=true)
+	int webComprasInserir(String dsjson);
 }

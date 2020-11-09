@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layoutPadrao}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Adicionar Compra</title>    
+</head>	  
+
+<body>
+<div layout:fragment="conteudo"> 
+	<div class="container">
+		<h5>Compra</h5>
+		<div class="card">		
+ 
+			        <form th:action="@{/integracaoCompras/salvarCompra}" th:object="${compraItem}" method="post">
+			        				<div id="app" class="card-panel" style="height: 390px;">	        
+	        <div class="row"> 
+	        	<div class="col m12 s12"> 
+			        	<input type="hidden" id="codigo" th:field="*{codigo}" value="${codigo}"> 
+			        	 <div class="card-content black-text">
+				            <table id="table" class="responsive-table highlight">
+				                <thead>
+				                    <tr>
+				                        <th>Código</th>
+				                        <th>Produto</th>
+				                        <th>Valor produto</th>
+				                        <th>Valor desconto</th>		                        
+				                    </tr>
+				                </thead>
+				                <tbody id="tbody">
+				                </tbody>
+				            </table>			
+				         </div>
+				        			        </div>         
+	            </div> 
+				         </div>
+				            <button class="waves-effect waves-light btn" type="submit">Salvar</button>
+			            </form>
+					    <div class="col-md-12 center text-center">
+				    		<span class="left" id="total_reg"></span>
+			            	<ul class="pagination pager" id="myPager"></ul>
+			          	</div>   
+
+	    	
+	    </div>	
+	</div>
+</div>
+
+<th:block layout:fragment="javascript-controle">
+	
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script th:src="@{/javascript/controle01.js}"></script>
+	<script th:src="@{/javascript/financeiro-detalhes-nf.js}"></script>
+	<script type="text/javascript" th:src="@{/javascript/pagination.js}"></script>
+
+</th:block>    
+</body>
+</html>		

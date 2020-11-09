@@ -111,7 +111,11 @@
 		    <artifactId>jasperreports-fonts</artifactId>
 		    <version>6.12.2</version>
 		    <scope>compile</scope>
-		</dependency>										
+		</dependency>	
+		<dependency>
+	    	<groupId>com.google.code.gson</groupId>
+	    	<artifactId>gson</artifactId>		    	
+		</dependency>											
 	</dependencies>
 
 	<build>

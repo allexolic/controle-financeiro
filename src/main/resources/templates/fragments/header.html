@@ -8,7 +8,7 @@
     <div class="nav-wrapper container"><a id="logo-container" href="#"th:href="@{/controleFinanceiro}" class="brand-logo">Financeiro</a>
       <ul class="right hide-on-med-and-down">
       	<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/dashboard}">Dashboard</a></li>
-        <li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
+        <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
         <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')"><a th:href="@{/contas}">Contas</a></li>
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/usuarios}">Usuários</a></li>        
         <li sec:authorize="hasRole('ROLE_PARAM')">
@@ -30,6 +30,7 @@
         		<li><a href="#" style="font-size: 15px;">Total Compras</a></li>
         	</ul>
         </li>
+        <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')"><a th:href="@{/integracaoCompras}">WebService</a></li>
         <li>
         	<a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn-small">
         		<i class="material-icons">lock_open</i>Login
@@ -56,7 +57,7 @@
  	   -->	 	  
       <ul id="nav-mobile" class="side-nav">
       	<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/dashboard}">Dashboard</a></li>
-        <li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
+        <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"><a th:href="@{/compras}">Compra</a></li>
         <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"><a th:href="@{/contas}">Contas</a></li>
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/usuarios}">Usuários</a></li>
         <li sec:authorize="hasRole('ROLE_PARAM')">
@@ -79,6 +80,7 @@
         		<li><a href="#" style="font-size: 15px;">Total Compras</a></li>
         	</ul>
         </li>
+        <li sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')"><a th:href="@{/integracaoCompras}">WebService</a></li>
         <li>
         	<a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn-small">
         		<i class="material-icons">lock_open</i>Login
