@@ -6,7 +6,26 @@
 
 <head>
 	<title>Dashboard</title>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<style type="text/css">
+	@media only screen and(max-width: 300px){
+		.chart{
+			width: 300px;
+		}
+		.pieChart{
+			width: 100px;
+		}
+	}
+	@media only screen and(max-width: 900px){
+		.chart{
+			width: 900px;
+		}
+		.pieChart{
+			width: 900px;
+		}		
+	}	
+	</style>
 </head>	  
 
 <body>
@@ -29,8 +48,8 @@
 								</div>
 							</div>	
 						</div>	
-					</div>
-					<div class="row">
+						
+		
 						<div class="col m4">
 							<div class="panel panel-success">
 								<div class="panel-heading">
@@ -43,8 +62,7 @@
 								</div>
 							</div>	
 						</div>	
-					</div>
-					<div class="row">
+
 						<div class="col m4">
 							<div class="panel panel-success">
 								<div class="panel-heading">
@@ -59,8 +77,97 @@
 							</div>	
 						</div>											
 					</div>	
-	
-	    		</div>
+					<div class="row">
+							<div id="loading" align="center">
+            					<img th:src="@{/vendor/img/loading.gif}" alt="loading...">            					
+        					</div>	
+						<div class="col s12 m2 l6">						
+							<div align="center">
+						        <h6>Total compras últimos 6 meses</h6>
+						        <div class="chart" id="chart_div"></div>							        				        
+						    </div>
+						</div>
+						<div class="col s12 m2 l6">
+							<div align="center">
+								<h6>Produtos mais comprados</h6>
+								<div class="pieChart" id="piechart"></div>							
+							</div>
+						</div>
+					</div>
+					    <script th:inline="javascript">
+					        var loading = document.getElementById('loading');
+					        var real_data = /*[[${chartData}]]*/'noValue';
+					 		var pie_data = [[${chartDataPie}]];
+					 		
+					 		loading.hidden = false;
+					        
+					 		$(document).ready(function() {
+					            google.charts.load('current', {
+					                packages : [ 'corechart', 'bar' ]
+					            });
+					            google.charts.setOnLoadCallback(drawColumnChart);
+					            google.charts.setOnLoadCallback(drawPieChart);	            
+					            
+					             
+					        });
+							 
+					 		loading.hidden = true;
+					        
+					        function drawColumnChart() {
+					            var data = new google.visualization.DataTable();
+					            data.addColumn('string', 'Year');
+					            data.addColumn('number', 'Total');
+					            
+					            Object.keys(real_data).forEach(function(key) {
+					                data.addRow([ key, real_data[key] ]);
+					                
+					            });
+					            var options = {
+					                //title : 'Total mes a mes',
+					                is3D: true,
+					                width: '100%',
+            			            height: 300,
+            			            chartArea: {width: '80%'},
+					                hAxis : {
+					                    title : 'Mes/Ano',
+					                },
+					                vAxis : {
+					                    title : 'Total'
+					                },
+					                legend: 'none'
+					            };
+					            var chart = new google.visualization.ColumnChart(document
+					                    .getElementById('chart_div'));
+					            chart.draw(data, options);
+					        }
+					
+					        function drawPieChart() {
+					            var data = new google.visualization.DataTable();
+					            data.addColumn('string', 'Year');
+					            data.addColumn('number', 'Views');
+					            Object.keys(pie_data).forEach(function(key) {
+					                data.addRow([ key, pie_data[key] ]);
+					            });
+					            var options = {
+					                //title : 'Produtos mais comprados',
+					                is3D: true,
+					                width: '100%',
+					                height: 300,
+					                chartArea: {width: '100%' },
+					                legend : 'right'
+					            };
+					            var chart = new google.visualization.PieChart(document
+					                    .getElementById('piechart'));
+					            chart.draw(data, options);
+					        }
+					        
+					        $(window).resize(function(){
+					        	drawColumnChart();
+					        	drawPieChart();
+					        });
+					        
+					    </script>	 
+	    		</div>			
 	    	</div>
 		</div>	
 	</div>

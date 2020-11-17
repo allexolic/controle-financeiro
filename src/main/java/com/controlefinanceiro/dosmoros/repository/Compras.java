@@ -2,6 +2,8 @@ package com.controlefinanceiro.dosmoros.repository;
 
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,4 +40,29 @@ public interface Compras extends JpaRepository<Compra, Long>{
 	
 	@Query(value="select * from Compra_inserir(:dsjson)", nativeQuery=true)
 	int webComprasInserir(String dsjson);
+	
+	
+	@Query(value="select to_char(date_part('month',dt_compra),'99')mes " + 
+			"  from compra " + 
+			" group by date_part('month',dt_compra), date_part('year', dt_compra) " + 
+			" order by  date_part('year', dt_compra) desc, date_part('month',dt_compra) desc", nativeQuery=true)
+	List<String> totalComprasMes();
+
+	@Query(value="select to_char(date_part('year', dt_compra),'9999')ano" + 
+			"  from compra " + 
+			" group by date_part('month',dt_compra), date_part('year', dt_compra) " + 
+			" order by  date_part('year', dt_compra)desc , date_part('month',dt_compra) desc", nativeQuery=true)
+	List<String> totalComprasAno();
+
+	@Query(value="select count(*)total" + 
+			"  from compra " + 
+			" group by date_part('month',dt_compra), date_part('year', dt_compra) " + 
+			" order by  date_part('year', dt_compra) desc, date_part('month',dt_compra) desc", nativeQuery=true)
+	List<Integer> totalComprasQtd();	
+	
+	@Query(value="select nm_produto from produtos_mais_comprados", nativeQuery=true)
+	List<String> produtosMaisComprados();
+	
+	@Query(value="select total from produtos_mais_comprados", nativeQuery=true)
+	List<Integer> totalProdutosMaisComprados();
 }

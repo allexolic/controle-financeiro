@@ -80,8 +80,8 @@ public class ContaController {
 		
 			Long nomeConta = (long) conta.getNmDoc();
 			
-			int idUsuario = usuarios.usuarioId(principal.getName());
-			int idVisibilidade = usuarios.usuarioVisibilidade(idUsuario);
+			Integer idUsuario = usuarios.usuarioId(principal.getName());
+			Integer idVisibilidade = usuarios.usuarioVisibilidade(idUsuario);
 			
 			if(idVisibilidade == 2) {
 				idVisibilidade = 0;
@@ -116,7 +116,7 @@ public class ContaController {
 	@PostMapping("/add")
 	public ModelAndView salvar(@Valid Conta conta, Principal principal, RedirectAttributes attributes) {
 		
-		int idUsuario;
+		Integer idUsuario;
 		
 		if(conta.getDtPagamento() == null) {
 			conta.setFlPago(0);
@@ -152,6 +152,7 @@ public class ContaController {
 			conta.setUsuarioAtualizacao(idUsuario);
 			servContas.salvar(conta);
 			attributes.addFlashAttribute("message", "Conta atualizada com sucesso.");
+			
 		}
 		Long codigo = conta.getId();
 		

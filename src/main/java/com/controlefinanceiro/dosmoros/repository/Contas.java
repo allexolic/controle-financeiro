@@ -26,7 +26,7 @@ public interface Contas extends JpaRepository<Conta, Long>{
 		   nativeQuery=true)	
 	Page<Conta> porStatus(@Param("status")String statusConta, @Param("dtVencimento")String dtVencimento, 
 			              @Param("dtVencimentoAte")String dtVencimentoAte, @Param("nomeConta")Long nomeConta, 
-			              @Param("visibilidade")int visibilidade, Pageable pageable);
+			              @Param("visibilidade")Integer visibilidade, Pageable pageable);
 	
 
 }

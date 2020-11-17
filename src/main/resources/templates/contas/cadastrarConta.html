@@ -24,6 +24,8 @@
 						<form class="col s12" th:action="@{/contas/add}" th:object="${conta}" method="post"
 							  enctype="multipart/form-data">
 							<input type="hidden" th:field="*{id}" />
+							<input type="hidden" th:field="*{usuarioCadastro}" />
+							<input type="hidden" th:field="*{usuarioAtualizacao}" />
 							<input type="hidden" th:field="*{flPago}" />
 							<div class="row">								
 								<div class="input-field s12 col m6">

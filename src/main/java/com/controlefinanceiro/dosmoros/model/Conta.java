@@ -59,10 +59,10 @@ public class Conta {
 	private String codBarras;
 	
 	@Column(name = "id_usuario_ins")
-	private int usuarioCadastro;
+	private Integer usuarioCadastro;
 	
 	@Column(name = "id_usuario_upd")
-	private int usuarioAtualizacao;
+	private Integer usuarioAtualizacao;
 	
 	public Date getDtVencimentoAte() {
 		return dtVencimentoAte;
@@ -144,21 +144,23 @@ public class Conta {
 		this.codBarras = codBarras;
 	}
 
-	public int getUsuarioCadastro() {
+	public Integer getUsuarioCadastro() {
 		return usuarioCadastro;
 	}
 
-	public void setUsuarioCadastro(int usuarioCadastro) {
+	public void setUsuarioCadastro(Integer usuarioCadastro) {
 		this.usuarioCadastro = usuarioCadastro;
 	}
 
-	public int getUsuarioAtualizacao() {
+	public Integer getUsuarioAtualizacao() {
 		return usuarioAtualizacao;
 	}
 
-	public void setUsuarioAtualizacao(int usuarioAtualizacao) {
+	public void setUsuarioAtualizacao(Integer usuarioAtualizacao) {
 		this.usuarioAtualizacao = usuarioAtualizacao;
 	}
+
+	
 
 	
 }

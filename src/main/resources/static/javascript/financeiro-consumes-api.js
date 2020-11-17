@@ -5,12 +5,18 @@ var tableTr = document.querySelectorAll('#tbody tr');
     Array.prototype.forEach.call(tableTr, function(node){
         node.parentNode.removeChild(node);
     });
-    
 
+    var divLoading = document.querySelector('#loading');  
+    var imgTag = document.createElement('img');
+    imgTag.setAttribute('src','/vendor/img/loading.gif');
+    imgTag.setAttribute('alt','loading');
+    divLoading.appendChild(imgTag);
+    
 axios.get('https://apirest-financeiro.herokuapp.com/api/totalpornotafiscal')
     .then(function(response){
 
-
+    	divLoading.hidden = true;
+    	
         for(i=0; i < response.data.length; i++){            
             //console.log(response);
             //var table = document.getElementById('table');           
