@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.controlefinanceiro.dosmoros.controller.page.PageWrapper;
 import com.controlefinanceiro.dosmoros.dto.FabricanteDTO;
 import com.controlefinanceiro.dosmoros.model.Fabricante;
-import com.controlefinanceiro.dosmoros.repository.Fabricantes;
 import com.controlefinanceiro.dosmoros.service.FabricantesService;
 
 @Controller
 @RequestMapping("/fabricantes")
 public class FabricanteController {
-
-	@Autowired
-	private Fabricantes repFabricantes;
 	
 	@Autowired
 	private FabricantesService servFabricantes;
@@ -69,7 +64,7 @@ public class FabricanteController {
 		String nome = fabricante.getNome() == null ? "%" : fabricante.getNome();
 		
 		//model.addAttribute("repFabricantes", repFabricantes.porNome(nome));
-		PageWrapper<Fabricante> paginaWrapper = new PageWrapper<>(repFabricantes.porNome(nome, pageable),
+		PageWrapper<Fabricante> paginaWrapper = new PageWrapper<>(servFabricantes.porNome(nome, pageable),
 				                                                  httpServletRequest);
 		
 		mv.addObject("pagina", paginaWrapper);
@@ -95,7 +90,7 @@ public class FabricanteController {
 	
 	@RequestMapping("/filtro")
 	public @ResponseBody List<FabricanteDTO> filtradas(String nome){
-		return repFabricantes.filtradas(nome);
+		return servFabricantes.filtradas(nome);
 	}
 	
 }
