@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,24 +21,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.controlefinanceiro.dosmoros.controller.page.PageWrapper;
 import com.controlefinanceiro.dosmoros.dto.ProdutoDTO;
-
 import com.controlefinanceiro.dosmoros.model.Produto;
-import com.controlefinanceiro.dosmoros.repository.Fabricantes;
-import com.controlefinanceiro.dosmoros.repository.Produtos;
+import com.controlefinanceiro.dosmoros.service.FabricantesService;
 import com.controlefinanceiro.dosmoros.service.ProdutosService;
 
 @Controller
 @RequestMapping("/produtos")
 public class ProdutoController {
-
-	@Autowired
-	private Produtos repProdutos;
 	
 	@Autowired
 	private ProdutosService servProdutos;
 	
 	@Autowired
-	private Fabricantes repFabricantes;
+	private FabricantesService servFabricantes;
 	
 	/*
 	@RequestMapping(value = "/listar")
@@ -57,7 +51,7 @@ public class ProdutoController {
 		
 		String nome = produto.getNomeProduto() == null ? "%" : produto.getNomeProduto();
 			
-		PageWrapper<Produto> paginaWrapper = new PageWrapper<>(repProdutos.porNome(nome, pageable),
+		PageWrapper<Produto> paginaWrapper = new PageWrapper<>(servProdutos.porNome(nome, pageable),
                 httpServletRequest);
 		
 		model.addAttribute("pagina", paginaWrapper);
@@ -76,7 +70,7 @@ public class ProdutoController {
 
 		Long nomefabricante = fabricante;
 		
-		PageWrapper<Produto> paginaWrapper = new PageWrapper<>(repProdutos.porProdutoFabricante(nome, nomefabricante, pageable),
+		PageWrapper<Produto> paginaWrapper = new PageWrapper<>(servProdutos.porProdutoFabricante(nome, nomefabricante, pageable),
 				                                               httpServletRequest);
 		
 		model.addAttribute("pagina", paginaWrapper);
@@ -118,7 +112,7 @@ public class ProdutoController {
 	@RequestMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable(name = "codigo") Produto produto) {
 		ModelAndView mv = new ModelAndView("/produtos/cadastrarProduto");
-		mv.addObject("listaFabricantes", repFabricantes.findAll());
+		mv.addObject("listaFabricantes", servFabricantes.findAll());
 		
 		mv.addObject(produto);
 
@@ -137,6 +131,6 @@ public class ProdutoController {
 	
 	@RequestMapping("/filtro")
 	public @ResponseBody List<ProdutoDTO> filtradas(String nomeProduto){
-		return repProdutos.filtradas(nomeProduto);
+		return servProdutos.filtradas(nomeProduto);
 	}
 }

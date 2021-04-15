@@ -35,4 +35,8 @@ public class FabricantesService {
 	public List<FabricanteDTO> filtradas(String nome){
 		return repFabricantes.filtradas(nome);
 	}
+	
+	public List<Fabricante> findAll() {
+		return repFabricantes.findAll();
+	}
 }
