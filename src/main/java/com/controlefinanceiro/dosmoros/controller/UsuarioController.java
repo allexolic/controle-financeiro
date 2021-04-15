@@ -6,30 +6,23 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.controlefinanceiro.dosmoros.controller.page.PageWrapper;
 import com.controlefinanceiro.dosmoros.model.Usuario;
 import com.controlefinanceiro.dosmoros.repository.Permissoes;
-import com.controlefinanceiro.dosmoros.repository.Usuarios;
 import com.controlefinanceiro.dosmoros.service.UsuariosService;
 
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
-
-	@Autowired
-	private Usuarios repUsuarios;
 	
 	@Autowired
 	private Permissoes repPermissoes;
@@ -46,7 +39,7 @@ public class UsuarioController {
 		String username = usuario.getUsername() == null ? "%" : usuario.getUsername();
 		String nome = usuario.getNome() == null ? username : usuario.getNome();
 		
-		PageWrapper<Usuario> paginaWrapper = new PageWrapper<>(repUsuarios.porUsername(username, nome, pageable),
+		PageWrapper<Usuario> paginaWrapper = new PageWrapper<>(servUsuarios.porUsername(username, nome, pageable),
 															   httpServletRequest);
 		
 		mv.addObject("pagina", paginaWrapper);
@@ -113,7 +106,7 @@ public class UsuarioController {
 		Long codigo = usuario.getId();
 		ModelAndView mv = new ModelAndView("redirect:/usuarios/" + codigo);
 		
-		mv.addObject("listaUsuarios", repUsuarios.findAll());
+		mv.addObject("listaUsuarios", servUsuarios.findAll());
 		
 		return mv;
 	}

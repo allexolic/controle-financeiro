@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.controlefinanceiro.dosmoros.dto.UsuarioDTO;
 import com.controlefinanceiro.dosmoros.model.Permissao;
 import com.controlefinanceiro.dosmoros.model.Usuario;
 
@@ -70,5 +73,25 @@ public class UsuariosService implements UserDetailsService {
 		usuario.setPermissoes((List<Permissao>) usuario.getPermissoes());
 		
 		usuarios.save(usuario);
+	}
+	
+	public Page<Usuario> porUsername(String username, String nome, Pageable pageable){
+		return usuarios.porUsername(username, nome, pageable);
+	}
+	
+	public List<UsuarioDTO> filtradas(String username){
+		return usuarios.filtradas(username);
+	}
+	
+	public int usuarioId(String name) {
+		return usuarios.usuarioId(name);
+	}
+	
+	public int usuarioVisibilidade(int id) {
+		return usuarios.usuarioVisibilidade(id);
+	}
+	
+	public List<Usuario> findAll(){
+		return usuarios.findAll();
 	}
 }

@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,11 +25,10 @@ import com.controlefinanceiro.dosmoros.controller.page.PageWrapper;
 import com.controlefinanceiro.dosmoros.model.Conta;
 import com.controlefinanceiro.dosmoros.model.Documento;
 import com.controlefinanceiro.dosmoros.model.StatusConta;
-import com.controlefinanceiro.dosmoros.repository.Contas;
 import com.controlefinanceiro.dosmoros.repository.Documentos;
 import com.controlefinanceiro.dosmoros.repository.TipoContas;
-import com.controlefinanceiro.dosmoros.repository.Usuarios;
 import com.controlefinanceiro.dosmoros.service.ContasService;
+import com.controlefinanceiro.dosmoros.service.UsuariosService;
 
 @Controller
 @RequestMapping("/contas")
@@ -39,10 +36,7 @@ public class ContaController {
 	
 	@Autowired
 	private ContasService servContas;
-	
-	@Autowired
-	private Contas contas;
-	
+		
 	@Autowired
 	private Documentos docs;
 	
@@ -50,7 +44,7 @@ public class ContaController {
 	private TipoContas tipoContas;
 	
 	@Autowired
-	private Usuarios usuarios;
+	private UsuariosService servUsuarios;
 	
 	@GetMapping
 	public ModelAndView viewContas(Conta conta, Principal principal, @PageableDefault(size = 5) Pageable pageable,
@@ -80,8 +74,8 @@ public class ContaController {
 		
 			Long nomeConta = (long) conta.getNmDoc();
 			
-			Integer idUsuario = usuarios.usuarioId(principal.getName());
-			Integer idVisibilidade = usuarios.usuarioVisibilidade(idUsuario);
+			Integer idUsuario = servUsuarios.usuarioId(principal.getName());
+			Integer idVisibilidade = servUsuarios.usuarioVisibilidade(idUsuario);
 			
 			if(idVisibilidade == 2) {
 				idVisibilidade = 0;
@@ -89,13 +83,13 @@ public class ContaController {
 				idVisibilidade = idUsuario;
 			}
 			
-		PageWrapper<Conta> pageWrapper = new PageWrapper<>(contas.porStatus(status, 
-														   sdf.format(dtVenc),
-														   sdf.format(dtVencAte),
-														   nomeConta,
-														   idVisibilidade,
-														   pageable),
-														   httpServletRequest);
+		PageWrapper<Conta> pageWrapper = new PageWrapper<>(servContas.porStatus(status, 
+																				sdf.format(dtVenc),
+																				sdf.format(dtVencAte),
+																				nomeConta,
+																				idVisibilidade,
+																				pageable),
+																				httpServletRequest);
 		
 		mv.addObject("pagina", pageWrapper);		
 		mv.addObject("tipoConta", tipoContas.listaTipoConta());
@@ -139,7 +133,7 @@ public class ContaController {
 			}
 		}
 		
-		idUsuario = usuarios.usuarioId(principal.getName());
+		idUsuario = servUsuarios.usuarioId(principal.getName());
 		
 		if(conta.getId() == null) {
 			conta.setUsuarioCadastro(idUsuario);
