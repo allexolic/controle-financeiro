@@ -2,6 +2,8 @@ package com.controlefinanceiro.dosmoros.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.controlefinanceiro.dosmoros.model.Compra;
@@ -40,4 +42,17 @@ public class ComprasService {
 		
 	}
 	
+	public Page<Compra> porLoja(String nmEstabelecimento, int visibilidade, Pageable pageable){
+		return repCompras.porLoja(nmEstabelecimento, visibilidade, pageable);
+	}
+	
+	public long countPorMes() {
+		return repCompras.countPorMes();
+	}
+	
+	public String sumCompras() {
+		return repCompras.sumCompras();
+	}
+	
+
 }

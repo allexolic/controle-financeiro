@@ -71,4 +71,8 @@ public class ProdutosService {
 	public List<String> porFabricante(@Param("produto") String nomeProduto){
 		return repProdutos.porFabricante(nomeProduto);
 	}
+	
+	public List<Produto> findAll(){
+		return repProdutos.findAll();
+	}
 }
